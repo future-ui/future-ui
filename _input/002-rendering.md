@@ -25,7 +25,7 @@ same across browsers.
 
 The React docs explain the implications well:
 
-> Event delegation: React doesn't actually attach event handlers to
+> **Event delegation:** React doesn't actually attach event handlers to
 > the nodes themselves. When React starts up, it starts listening for
 > all events at the top level using a single event listener. When a
 > component is mounted or unmounted, the event handlers are simply
@@ -40,10 +40,11 @@ The React docs explain the implications well:
 ### A Simple Component
 
 The following component renders a heading. We can then use
-`React.render` to attach to the body of the document.
+`react-dom#render` to attach to the body of the `document`.
 
 ```javascript
 import React, { Component } from 'react';
+import { render } from 'react-dom';
 
 export default class Simple extends Component {
   render() {
@@ -53,7 +54,7 @@ export default class Simple extends Component {
 ```
 
 ```javascript
-React.render(<Simple/>, document.body);
+render(<Simple/>, document.body);
 ```
 
 To see this component in action, run the following:
@@ -146,10 +147,10 @@ Each of the `data-reactid`s is a node in the tree.
 
 ### render
 
-[render][React#render] is the most common function to be written on a React Element,
-partially because it is a `required` function. A `render()` function
-uses `props` and `state` to return a virtual representation of a
-node.
+[render][React#render] is the most common function to be written on a
+React Element, partially because it is a `required` function. A
+`render()` function uses `props` and `state` to return a virtual
+representation of a node.
 
 In the following case, we ignore `this.props` and `this.state` and
 instead render a constant result node representing a paragraph tag
@@ -165,8 +166,8 @@ class SimpleRender extends Component {
 }
 ```
 
-In the following case, we use both `this.props` and `this.state` to
-return a more complex element.
+Moving up in complexity, we can use both `this.props` and `this.state`
+to return a more complex element.
 
 ```javascript
 class ComplexRender extends Component {
@@ -187,16 +188,14 @@ class ComplexRender extends Component {
 
 As shown in the code above, the usage of state and props is incredibly
 similar. The difference between the two is how (and where) the data is
-managed.
+managed. We go into this more in the chapter on State Management.
 
 ### JSX
 
-[JSX][jsx] is an XML-like extension to ECMAScript which is currently a Draft
-Speficiation. JSX looks a lot like HTML, but it has some crucial
-differences.
-
-For one, JSX transforms to JavaScript. An example of this transform,
-given by the React docs is shown below.
+[JSX][jsx] is an XML-like extension to ECMAScript which is currently a
+Draft Speficiation. JSX looks a lot like HTML, but it has some crucial
+differences. For one, JSX transforms to JavaScript. An example of this
+transform, given by the React docs is shown below.
 
 ```javascript
 // Input (JSX)
@@ -208,7 +207,7 @@ var app = <Nav color="blue" />;
 var app = React.createElement(Nav, {color:"blue"});
 ```
 
-Our more complex example from before (ComplexRender) transforms into
+Our more complex example from before (`ComplexRender`) transforms into
 the following render function when using [babel][babel] for the
 transform.
 
@@ -242,26 +241,17 @@ understand one of the restrictions of our render function: A render
 function can only have a single JSX root node as the return
 value. This is because of the fact that JSX transforms into JS, which
 means returning multiple root nodes would mean the same thing as
-writing code that returned multiple functions.
+returning multiple functions.
 
-### Dealing with State
+### Accepting Props
 
-When building UI, one of the most complex pieces is the state of the
-application. React provides two core ways to manage State,
-`this.state` and `this.props`.
-
-As we mentioned before, one of the key differences between
-`this.props` and `this.state` is where the data gets
-managed. `this.state`, as it turns out, is managed in the same element
-it is declared in.
-
-To illustrate the concept of State management in React, we will
-revisit the Counter example from earlier in this chapter. In the
-following example, we initialize the state of our counter to 0 and
-provide two functions to increment and decrement the counter. We also
-write a second Element, whose job is to render a number in "human"
-form as well as a third element, whose job is to render and dispatch
-state changes.
+To illustrate the role of Props in React's render(), we will revisit
+the Counter example from earlier in this chapter. In the following
+example, we initialize the state of our counter to 0 and provide two
+functions to increment and decrement the counter. We also write a
+second Element, whose job is to render a number in "human" form as
+well as a third element, whose job is to render and dispatch state
+changes.
 
 ```javascript
 import React, { Component, PropTypes } from 'react';
@@ -350,120 +340,40 @@ In building this set of elements, we have:
 * Clearly defined APIs for our dumb elements.
 
 The parent node is specifying "This is what you can do to the state of
-the application" while our child elements are specifying their own API
-contract relating to how the user interacts with the UI.
+the application". Our child (dumb) elements are specifying their own
+API contract using PropTypes, which details their requirements. The
+child nodes are responsible for rendering the UI and defining how the
+user interacts with the rendered UI.
 
-#### Dumb Elements and propTypes
+### Render Targets
 
-In accordance with @dan_abramov's definition of
-[Dumb Elements][dumb-elements]. They are elements which:
+As we said earlier, part of React's power comes from being an
+abstraction layer. One of the most interesting facets of this is the
+ability to abstract render targets.
 
-* Have no dependencies on the rest of the app, e.g. Flux actions or
-  stores.
-* Often allow containment via this.props.children.
-* Receive data and callbacks exclusively via props.
-* Have a CSS file associated with them.
-* Rarely have their own state.
-* Might use other dumb components.
-* Examples: Page, Sidebar, Story, UserInfo, List.
+TODO: Talk briefly about constructing the previous examples for iOS.
 
-Talking briefly about `HumaneNumber`, we have created an element which
-abstracts the choice of "Which format do I use to represent numbers in
-my application?".
+## Lifecycle Methods
 
-propTypes define the API supported by a dumb element. For example, by
-looking at the following PropTypes, we can determine a fair bit of
-information about the element we're using.
+### Mounting
 
-```javascript
-static propTypes = {
-  title: string.isRequired,
-  isEligible: bool,
-  age: number.isRequired
-}
-static defaultProps = {
-  isEligible: false
-}
-```
+#### componentWillMount
+#### componentDidMount
 
-Notice how we're using `defaultProps` to fill in the gaps for those
-properties which we don't require to be passed in when using the
-element.
+### Updating
 
-#### HumaneNumber and encapsulating third party libraries
+#### componentWillReceiveProps
+#### shouldComponentUpdate
+#### componentWillUpdate
+#### componentDidUpdate
 
-`HumaneNumber` is nice because it provides an opinionated way to
-display numbers in an application, but we could use it to greater
-effect if we encapsulated [Numeral.js][numeral.js] in it's own
-element. (note that we've skipped some of the Numeral API and focused
-solely on rendering formatted strings).
+### Unmounting
+#### componentWillUnmount
 
-```javascript
-// HumaneNumber.js
-import React, { Component, PropTypes } from 'react';
-const { number, oneOf } = PropTypes;
-import numeral from 'numeral.js';
+## Advanced
 
-export class Numeral extends Component {
-
-  static propTypes = {
-    format: string,
-    num: number.isRequired
-  }
-
-  static defaultProps = {
-    format: '0,0'
-  }
-
-  mkNumeral = () => {
-    const { num, format } = this.props;
-    return numeral(num).format(format);
-  }
-
-  render() {
-    return (
-      <span>{this.mkNumeral()}</span>
-    )
-  }
-}
-
-export default class HumaneNumber extends Component {
-
-  static propTypes = {
-    num: number.isRequired
-  }
-
-  render() {
-    const { num } = this.props;
-    return (
-      <Numeral num={num} format='0,0' />
-    )
-  }
-}
-```
-
-We can now import and use the simplified `HumaneNumber` or the more 
-powerful `Numeral` element in another place in our application.
-
-```javascript
-import React, { Component, PropTypes } from 'react';
-const { number } = PropTypes;
-import HumaneNumber, { Numeral } from './HumaneNumber';
-
-class TimeAndMoney extends Component {
-
-  static propTypes = {
-    days: number.isRequired,
-    money: number.isRequired
-  }
-
-  render() {
-    return (
-      <div>
-        <p>In <HumaneNumber num={days} /> days; you've made
-        <Numeral num={money} format='($ 0.00 a)' /> dollars</p>
-      </div>
-    )
-  }
-}
-```
+### Autobinding
+### refs
+### statics
+### context
+### keys
