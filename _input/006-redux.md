@@ -17,4 +17,4 @@
 
 ## Normalizr
 
-camelizeKeys - humps
+
