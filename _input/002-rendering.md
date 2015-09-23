@@ -345,32 +345,26 @@ API contract using PropTypes, which details their requirements. The
 child nodes are responsible for rendering the UI and defining how the
 user interacts with the rendered UI.
 
-### Render Targets
-
-As we said earlier, part of React's power comes from being an
-abstraction layer. One of the most interesting facets of this is the
-ability to abstract render targets.
-
-TODO: Talk briefly about constructing the previous examples for iOS.
-
-## Lifecycle Methods
-
-### Mounting
-
-#### componentWillMount
-#### componentDidMount
-
-### Updating
-
-#### componentWillReceiveProps
-#### shouldComponentUpdate
-#### componentWillUpdate
-#### componentDidUpdate
-
-### Unmounting
-#### componentWillUnmount
-
 ## Advanced
+
+### Lifecycle Methods
+
+#### Mounting
+
+##### componentWillMount
+##### componentDidMount
+
+#### Updating
+
+##### componentWillReceiveProps
+##### shouldComponentUpdate
+##### componentWillUpdate
+##### componentDidUpdate
+
+#### Unmounting
+##### componentWillUnmount
+
+## Tips and Tricks
 
 ### Autobinding
 ### refs
