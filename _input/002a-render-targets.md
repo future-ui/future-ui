@@ -11,7 +11,7 @@ Text-based User Interfaces call back to the days of BBS and Midnight
 Commander. These days, with tools like blessed and blessed-contrib,
 it is easier than even to create great TUI experiences.
 
-![TODO: midnight commander screenshot]()
+TODO: midnight commander screenshot
 
 ## iOS
 ## Android
